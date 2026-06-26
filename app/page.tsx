@@ -43,7 +43,7 @@ export default function Home() {
     <div>
       <form
         onSubmit={testAI}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 w-1/2 max-w-3xl px-4"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 w-1/2 max-w-2xl px-4 ml-30"
       >
         <div className="relative">
           <input

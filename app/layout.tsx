@@ -24,7 +24,7 @@ export default function RootLayout({
           </div>
           </div>
         </div>
-        <div className="flex-1 p-4 relative">
+        <div className="flex-1 p-4 relative mx-30">
           {children}
         </div>
       </body>
