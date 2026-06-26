@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Sidebar from "@/components/sidebar";
 
 
 export default function RootLayout({
@@ -10,23 +11,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={` h-full antialiased`}
+      className={` h-full antialiased `}
     >
-      <body className="min-h-full flex flex-row">
-        <div className="w-1/5 p-4 border-r border-gray-300">
-          <p className="text-4xl font-bold">test</p>
+      <body className="flex min-h-screen">
+        <Sidebar />
 
-          <div>
-            <p className="mt-7 p-2 bg-gray-100 rounded cursor-pointer hover:bg-gray-200">새 채팅</p>
-
-            <div className="p-2 mt-5 font-bold">
-              <p>최근 채팅</p>
-          </div>
-          </div>
-        </div>
-        <div className="flex-1 p-4 relative mx-30">
+        <main className="flex-1 relative">
           {children}
-        </div>
+        </main>
       </body>
     </html>
   );
