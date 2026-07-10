@@ -1,9 +1,9 @@
-import {SYSTEM_PROMPT} from "@/prompts/systemPrompt";
+import { SYSTEM_PROMPT } from "@/prompts/systemPrompt";
 
 export async function POST(req: Request) {
   const { message } = await req.json();
   const model = ["qwen2.5:1.5b", "qwen3:8b", "gemma4:26b", "gemma4:e4b"]
-
+  
   const ollamaResponse = await fetch("http://localhost:11434/api/chat", {
     method: "POST",
     headers: {
@@ -11,17 +11,18 @@ export async function POST(req: Request) {
     },
     body: JSON.stringify({
       model: model[3],
-      think: false,
       stream: true,
       options: {
         temperature: 0.2,
         repeat_penalty: 1.1,
-        num_ctx: 8192,
+        num_ctx: 4096,
+        think: false,
+
       },
       messages: [
         {
           role: "system",
-          content: `` ,
+          content: SYSTEM_PROMPT,
         },
         {
           role: "user",
