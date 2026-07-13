@@ -2,7 +2,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import LoginModal from "@/components/LoginModal";
+import LoginModal from "@/components/login/LoginModal";
 import { useState } from "react";
 
 export default function Sidebar() {
