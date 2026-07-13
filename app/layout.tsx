@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/Sidebar";
 
 
 export default function RootLayout({

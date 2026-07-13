@@ -1,7 +1,7 @@
 "use client";
 
-import ChatInput from "@/components/chatinput";
-import Chat from "@/components/chat";
+import ChatInput from "@/components/chat/ChatInput";
+import Chat from "@/components/chat/Chat";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { v4 as uuid } from "uuid";
@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 type Message = {
   role: "user" | "assistant";
   content: string;
+  thinking?: string;
 };
 
 export default function ChatPage() {
@@ -30,6 +31,7 @@ export default function ChatPage() {
     const assistantMessage: Message = {
       role: "assistant",
       content: "",
+      thinking: "",
     };
 
     setMessages((prev) => [
@@ -58,26 +60,54 @@ export default function ChatPage() {
       if (!reader) return;
 
       const decoder = new TextDecoder();
-      let fullText = "";
+
+      let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
 
         if (done) break;
 
-        const chunk = decoder.decode(value);
-        fullText += chunk;
-
-        setMessages((prev) => {
-          const copy = [...prev];
-
-          copy[copy.length - 1] = {
-            role: "assistant",
-            content: fullText,
-          };
-
-          return copy;
+        buffer += decoder.decode(value, {
+          stream: true,
         });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (!line.trim()) continue;
+
+          const data = JSON.parse(line);
+
+
+          setMessages((prev) => {
+            const copy = [...prev];
+
+            const last = copy[copy.length - 1];
+
+
+            if (data.type === "thinking") {
+              copy[copy.length - 1] = {
+                ...last,
+                thinking:
+                  (last.thinking || "") + data.value,
+              };
+            }
+
+
+            if (data.type === "content") {
+              copy[copy.length - 1] = {
+                ...last,
+                content:
+                  last.content + data.value,
+              };
+            }
+
+
+            return copy;
+          });
+        }
       }
     } catch (error) {
 
@@ -150,6 +180,7 @@ export default function ChatPage() {
         testAI={testAI}
         stopAI={stopAI}
         isStreaming={isStreaming}
+        mode="chat"
       />
     </div>
   );

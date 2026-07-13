@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuid } from "uuid";
-import ChatInput from "@/components/chatinput";
-import StartChatInput from "./startchatinput";
+import ChatInput from "@/components/chat/ChatInput";
 
 export default function StartChat() {
   const router = useRouter();
@@ -33,12 +32,13 @@ export default function StartChat() {
         뭐가 문제냐?
       </h1>
 
-      <StartChatInput
+      <ChatInput
         message={message}
         setMessage={setMessage}
         testAI={startChat}
         stopAI={() => {}}
         isStreaming={false}
+        mode="start"
       />
 
     </div>

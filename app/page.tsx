@@ -1,4 +1,4 @@
-import StartChat from "@/components/StartChat";
+import StartChat from "@/components/chat/StartChat";
 
 export default function Page() {
   return <StartChat />;
