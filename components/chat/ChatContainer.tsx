@@ -171,7 +171,7 @@ export default function ChatPage() {
 
 
   return (
-    <div className="flex h-screen flex-col bg-white">
+    <div className="flex h-screen flex-col bg-bg">
       <Chat messages={messages} />
 
       <ChatInput
