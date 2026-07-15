@@ -3,15 +3,15 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
         <div>
             <div className="flex flex-col mt-3 w-full md:w-96">
                 <div className="flex justify-end">
-                    <button className="w-9 h-9 text-3xl rounded-full flex items-center justify-center hover:bg-gray-100" onClick={onClose}>
+                    <button className="w-9 h-9 text-3xl rounded-full flex items-center justify-center text-text hover:bg-loginform-close-hover" onClick={onClose}>
                         ×
                     </button>
                 </div>
                 <div className="flex flex-col items-center justify-center mt-3">
-                    <p className="text-2xl mb-2">로그인 및 회원가입</p>
-                    <p className="text-gray-600">로그인을 통해 자소서 정보를 관리하세요.</p>
+                    <p className="text-2xl mb-2 text-text">로그인 및 회원가입</p>
+                    <p className="text-loginform-explain">로그인을 통해 자소서 정보를 관리하세요.</p>
                 </div>
-                <button className="w-full mt-6 p-3 rounded-full border border-gray-500">
+                <button className="w-full mt-6 p-3 rounded-full border border-loginform-button-border">
                     <div className="flex items-center justify-center gap-2 cursor-pointer">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

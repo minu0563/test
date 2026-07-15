@@ -1,35 +1,80 @@
-// 사이드바
 "use client";
 
 import { useRouter } from "next/navigation";
 import LoginModal from "@/components/login/LoginModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
     const router = useRouter();
     const [isLoginOpen, setLoginOpen] = useState(false);
+    const [isDark, setIsDark] = useState(false);
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme === "dark") {
+            document.documentElement.classList.add("dark");
+            setIsDark(true);
+        } else {
+            document.documentElement.classList.remove("dark");
+            setIsDark(false);
+        }
+    }, []);
+
+    const toggleTheme = () => {
+        if (isDark) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+            setIsDark(false);
+        } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+            setIsDark(true);
+        }
+    };
 
     return (
-        <div className="w-12 md:w-48 lg:w-64 p-4 border-r border-gray-300 h-screen flex flex-col">
-            <p className="hidden md:block text-4xl font-bold cursor-pointer"
-                onClick={() => router.push("/")} >test</p>
-            <p className="block md:hidden text-2xl font-bold text-center items-center cursor-pointer">+</p>
-            <p className="hidden md:block mt-7 p-2 bg-gray-100 rounded cursor-pointer hover:bg-gray-200">
+        <div className="w-12 md:w-48 lg:w-64 p-4 border-r border-sidebar-border h-screen flex flex-col">
+            <p
+                className="hidden md:block text-4xl font-bold cursor-pointer text-text"
+                onClick={() => router.push("/")}
+            >
+                test
+            </p>
+
+            <p className="block md:hidden text-2xl font-bold text-text text-center items-center cursor-pointer">
+                +
+            </p>
+
+            <p
+                className="hidden md:block mt-7 p-2 rounded text-text font-bold cursor-pointer hover:bg-sidebar-newchat-hover"
+                onClick={() => router.push("/")}
+            >
                 새 채팅
             </p>
 
-            <div className="hidden md:block p-2 mt-5 font-bold">
+            <div className="hidden md:block text-text p-2 mt-5 font-bold">
                 <p>최근 채팅</p>
             </div>
 
-            <div className=" hidden md:block p-2 mt-auto font-bold cursor-pointer hover:bg-gray-100" onClick={() => setLoginOpen(true)}>
+            <button
+                onClick={toggleTheme}
+                className="hidden md:block mt-auto mb-2 p-2 rounded text-left text-text font-bold hover:bg-sidebar-newchat-hover"
+            >
+                {isDark ? "라이트 모드" : "다크 모드"}
+            </button>
+
+            <div
+                className="hidden md:block p-2 text-text font-bold cursor-pointer hover:bg-sideber-login-hover"
+                onClick={() => setLoginOpen(true)}
+            >
                 <p>login</p>
             </div>
 
-            <LoginModal 
-                isOpen={isLoginOpen} 
+            <LoginModal
+                isOpen={isLoginOpen}
                 onClose={() => setLoginOpen(false)}
-             />
+            />
         </div>
-    )
+    );
 }
