@@ -2,6 +2,145 @@
 @import "katex/dist/katex.min.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 기본*/
+  --bg: #ffffff;
+  --text: #000000;
+
+  /* 사이드 바 */
+  --sidebar-border: #d1d5dc;
+  --sidebar-newchat-hover: #f3f4f6;
+  --sideber-login-hover: #f3f4f6;
+
+  /* 채팅 페이지 배경 */
+  --chat-background: #fafafa;
+
+  /* ai 메세지 ui */
+  --aichat-background: #ffffff;
+  --aichat-border: #e5e5e5;
+  --aichat-text: #262626;
+
+  /* 추론 ui */
+  --thinking-border: #e5e5e5;
+  --thinking-text: #737373;
+  --thinking-hover-bg: #fafafa;
+  --thinking-hover-text: #262626;
+  --thinking-sideline: #d4d4d4;
+
+  /* 유저 메세지 ui*/
+  --user-chat: #155dfc;
+  --user-text: #ffffff;
+
+  /* ai 메세지 태그 디자인 */
+  --aichat-list: #404040;
+
+  --aichat-marker: #a1a1a1;
+
+  --aichat-block-border: #d4d4d4;
+  --aichat-block-bg: #fafafa;
+  --aichat-block-text: #525252;
+
+  --aichat-code-bg: #f5f5f5;
+  --aichat-code-text: #222222;
+
+  --aichat-codeblock-bg: #262626;
+  --aichat-codeblock-text: #f5f5f5;
+
+  --aichat-table-border: #e5e5e5;
+
+  --aichat-thead-bg: #fafafa;
+  --aichat-thead-text: #404040;
+  --aichat-thead-border: #e5e5e5;
+
+  --aichat-td-border: #f5f5f5;
+  --aichat-td-text: #525252;
+
+  --aichat-hr-border: #e5e5e5;
+
+  --aichat-a-text: #155dfc;
+  --aichat-a-text-hover: #193cb8;
+
+  /* 메세지 input ui */
+  --input-bg: #f3f4f6;
+  --input-text: #ffffff;
+  --input-button-bg: #3B82F6;
+  --input-button-hover: #155dfc;
+  --input-border: #e5e7eb;
+
+  /* 로그인 폼 ui */
+  --loginform-bg: #000000;
+  --loginform-close-hover: #f3f4f6;
+  --loginform-explain: #4a5565;
+  --loginform-button-border: #6a7282;
+}
+
+@theme {
+  /* 기본 */
+  --color-bg: var(--bg);
+  --color-text: var(--text);
+
+  /* 채팅 페이지 배경 */
+  --color-chat-bg: var(--chat-background);
+
+  /* 사이드바 ui */
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-newchat-hover: var(--sidebar-newchat-hover);
+  --color-sideber-login-hover: var(--sideber-login-hover);
+
+  /* ai 메세지 ui */
+  --color-aichat-bg: var(--aichat-background);
+  --color-aichat-text: var(--aichat-text);
+  --color-aichat-border: var(--aichat-border);
+  
+  /* 추론 ui */
+  --color-thinking-border: var(--thinking-border);
+  --color-thinking-text: var(--thinking-text);
+  --color-thinking-hover-bg: var(--thinking-hover-bg);
+  --color-thinking-hover-text: var(--thinking-hover-text);
+  --color-thinking-sideline: var(--thinking-sideline);
+  
+  /* 유저 메세지 디자인 */
+  --color-user-text: var(--user-text);
+  --color-user-chat: var(--user-chat);
+
+  /* ai 메세지 태그 디자인 */
+  --color-aichat-list: var(--aichat-list);
+
+  --color-aichat-marker: var(--aichat-marker);
+  
+  --color-aichat-block-border: var(--aichat-block-border);
+  --color-aichat-block-bg: var(--aichat-block-bg);
+  --color-aichat-block-text: var(--aichat-block-text);
+  
+  --color-aichat-code-bg: var(--aichat-code-bg);
+  --color-aichat-code-text: var(--aichat-code-text);
+  
+  --color-aichat-codeblock-bg: var(--aichat-codeblock-bg);
+  --color-aichat-codeblock-text: var(--aichat-codeblock-text);
+  
+  --color-aichat-table-border: var(--aichat-table-border);
+  
+  --color-aichat-thead-bg: var(--aichat-thead-bg);
+  --color-aichat-thead-text: var(--aichat-thead-text);
+  --color-aichat-thead-border: var(--aichat-thead-border);
+  
+  --color-aichat-td-border: var(--aichat-td-border);
+  --color-aichat-td-text: var(--aichat-td-text);
+
+  --color-aichat-hr-border: var(--aichat-hr-border);
+  
+  --color-aichat-a-text: var(--aichat-a-text);
+  --color-aichat-a-text-hover: var(--aichat-a-text-hover);
+  
+  /* 메세지 input ui */
+  --color-input-bg: var(--input-bg);
+  --color-input-text: var(--input-text);
+  --color-input-button-bg: var(--input-button-bg);
+  --color-input-button-hover: var(--input-button-hover);
+  --color-input-border: var(--input-border);
+
+  /* 로그인폼 ui */
+  --color-loginform-bg: var(--loginform-bg);
+  --color-loginform-close-hover: var(--loginform-close-hover);
+  --color-loginform-explain: var(--loginform-explain);
+  --color-loginform-button-border: var(--loginform-button-border);
 }
