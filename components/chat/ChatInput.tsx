@@ -59,13 +59,13 @@ export default function ChatInput({ message, setMessage, testAI, stopAI, isStrea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="메시지를 입력하세요"
-              className="w-full rounded-full bg-input-bg py-4 pl-5 pr-16 focus:outline-none"
+              className="w-full rounded-full bg-(--input-bg) py-4 pl-5 pr-16 text-(--text) border border-(--input-border) focus:outline-none"
             />
 
             <button
               type={isStreaming ? "button" : "submit"}
               onClick={isStreaming ? stopAI : undefined}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-input-button-bg px-4 py-2 text-input-text hover:bg-input-button-hover"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-(--input-button-bg) px-4 py-2 text-(--input-text) hover:bg-(--input-button-hover)"
             >
               {isStreaming ? "■" : "↑"}
             </button>
@@ -74,7 +74,7 @@ export default function ChatInput({ message, setMessage, testAI, stopAI, isStrea
       ) : (
         <form
           onSubmit={testAI}
-          className="border-t border-input-border p-4"
+          className="border-t border-(--input-border) p-4"
         >
           <div className="relative mx-auto max-auto w-full max-w-2xl">
             <input
@@ -83,13 +83,13 @@ export default function ChatInput({ message, setMessage, testAI, stopAI, isStrea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="메시지를 입력하세요"
-              className="w-full rounded-full bg-input-bg py-4 pl-5 pr-16 focus:outline-none"
+              className="w-full rounded-full bg-(--input-bg) py-4 pl-5 pr-16 text-(--text) border border-(--input-border) focus:outline-none"
             />
 
             <button
               type={isStreaming ? "button" : "submit"}
               onClick={isStreaming ? stopAI : undefined}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-input-button-bg px-4 py-2 text-input-text hover:bg-input-button-hover cursor-pointer"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-(--input-button-bg) px-4 py-2 text-(--input-text) hover:bg-(--input-button-hover) cursor-pointer"
             >
               {isStreaming ? "■" : "↑"}
             </button>

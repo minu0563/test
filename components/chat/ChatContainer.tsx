@@ -80,12 +80,10 @@ export default function ChatPage() {
 
           const data = JSON.parse(line);
 
-
           setMessages((prev) => {
             const copy = [...prev];
 
             const last = copy[copy.length - 1];
-
 
             if (data.type === "thinking") {
               copy[copy.length - 1] = {
@@ -95,7 +93,6 @@ export default function ChatPage() {
               };
             }
 
-
             if (data.type === "content") {
               copy[copy.length - 1] = {
                 ...last,
@@ -104,19 +101,16 @@ export default function ChatPage() {
               };
             }
 
-
             return copy;
           });
         }
       }
     } catch (error) {
-
       if ((error as Error).name === "AbortError") {
         console.log("AI 중지됨");
       } else {
         console.error(error);
       }
-
     } finally {
       setIsStreaming(false);
       setController(null);
@@ -157,7 +151,6 @@ export default function ChatPage() {
     sendMessage(text);
   };
 
-
   useEffect(() => {
     const firstMessage =
       sessionStorage.getItem("firstMessage");
@@ -169,9 +162,8 @@ export default function ChatPage() {
     }
   }, []);
 
-
   return (
-    <div className="flex h-screen flex-col bg-bg">
+    <div className="flex h-screen flex-col bg-(--bg)">
       <Chat messages={messages} />
 
       <ChatInput
