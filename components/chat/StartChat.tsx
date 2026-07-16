@@ -22,7 +22,7 @@ export default function StartChat() {
       message
     );
 
-    router.push(`/chat/${id}`);
+    router.push(`/c/${id}`);
   };
 
   return (

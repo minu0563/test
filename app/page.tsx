@@ -1,5 +1,159 @@
-import StartChat from "@/components/chat/StartChat";
+"use client";
 
-export default function Page() {
-  return <StartChat />;
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FileText, PencilLine, MessageSquareText, FilePenLine, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+const templates = [
+  {
+    icon: FilePenLine,
+    title: "자기소개서 & 이력서 첨삭",
+    description: "강점을 극대화하고 미흡한 문항과 표현을 즉시 개선합니다.",
+  },
+  {
+    icon: PencilLine,
+    title: "자기소개서 작성",
+    description: "개별 경험 데이터와 에피소드를 구조화하여 맞춤형 초안을 완성합니다.",
+  },
+  {
+    icon: MessageSquareText,
+    title: "면접 준비",
+    description: "지원 직무와 기업 분석을 기반으로 예상 질문과 답변 전략을 준비합니다.",
+  },
+  {
+    icon: FileText,
+    title: "정보 입력",
+    description: "AI가 기억했으면 하는 정보를 입력하세요.",
+  },
+];
+
+export default function StartScreen() {
+  const [intro, setIntro] = useState(false);
+  const [introStep, setIntroStep] = useState(0);
+
+  const router = useRouter();
+
+  /* 잡담용 이동 */
+  const goStratChat = () => {
+    router.push("/sc");
+  }
+
+  useEffect(() => {
+    const viewed = sessionStorage.getItem("start-intro");
+
+    if (viewed) {
+      setIntro(false);
+      return;
+    }
+
+    sessionStorage.setItem("start-intro", "true");
+    setIntro(true);
+
+    const timer1 = setTimeout(() => setIntroStep(1), 1500);
+    const timer2 = setTimeout(() => setIntroStep(2), 4000);
+    const timer3 = setTimeout(() => setIntro(false), 5000);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
+
+  return (
+    <div className="relative min-h-screen bg-(--bg) text-(--text)">
+      <AnimatePresence>
+        {intro && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-(--start-intro-bg)">
+
+            {introStep === 0 && (
+              <motion.h1 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.5 }}
+                className="text-4xl font-semibold tracking-tight text-(--start-intro-text)">
+                안녕하세요
+              </motion.h1>
+            )}
+
+
+            {introStep >= 1 && (
+              <div className="absolute flex items-center justify-center">
+
+                <motion.h1 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+                  className="text-4xl font-semibold tracking-tight text-(--start-intro-text)">
+                  <span className="text-blue-300">인천전자마이스터고</span> 학생을 위한 자소서 AI입니다
+                </motion.h1>
+
+
+                {introStep === 2 && (
+                  <motion.h1 initial={{ opacity: 0, y: 80 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+                    className="absolute top-full mt-6 text-2xl font-semibold tracking-tight text-(--start-intro-text)">
+                    무엇을 도와드릴까요?
+                  </motion.h1>
+                )}
+
+              </div>
+            )}
+
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: intro ? 0 : 1, y: intro ? 20 : 0 }} transition={{ duration: 0.6 }}
+        className="max-w-4xl mx-auto px-8 py-20">
+        <div className="mb-14">
+          <h1 className="text-3xl font-semibold tracking-tight text-(--start-title)">
+            무엇을 도와드릴까요?
+          </h1>
+
+          <p className="mt-3 text-sm text-(--start-description) max-w-xl leading-relaxed">
+            시작할 작업 유형을 선택해 주세요. 해당 형식에 최적화된 AI 템플릿을 제공합니다.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          {templates.map((item, index) => {
+            const Icon = item.icon;
+
+            return (
+              <motion.button key={item.title} initial={{ opacity: 0, y: 15 }} animate={{ opacity: intro ? 0 : 1, y: intro ? 15 : 0 }} transition={{ duration: 0.4, delay: index * 0.08 }}
+                className="group flex flex-col justify-between text-left rounded-xl border border-(--start-card-border) bg-(--start-card-bg) p-6 min-h-[170px] 
+                                         transition-all duration-200 hover:border-(--start-accent) hover:bg-(--start-card-hover) hover:-translate-y-1">
+                <div className="flex items-start justify-between w-full">
+                  <Icon size={20} strokeWidth={1.5} className="text-(--start-icon) group-hover:text-(--start-icon-hover) transition-colors" />
+                  <ArrowRight size={16} strokeWidth={1.5} className="text-(--start-arrow) group-hover:text-(--start-arrow-hover) group-hover:translate-x-1 transition-all" />
+                </div>
+
+                <div className="mt-8">
+                  <h3 className="text-sm font-semibold text-(--start-title) group-hover:text-(--start-accent) transition-colors">{item.title}</h3>
+                  <p className="mt-2 text-xs text-(--start-description) leading-relaxed">{item.description}</p>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        <motion.button initial={{ opacity: 0 }} animate={{ opacity: intro ? 0 : 1 }} transition={{ delay: 0.4 }} onClick={goStratChat}
+          className="group mt-4 w-full flex items-center justify-between rounded-xl border border-dashed border-(--start-card-border) bg-transparent p-5 
+                               transition-all duration-200 hover:border-(--start-accent) hover:bg-(--start-card-hover)">
+          <div className="flex items-center gap-4 text-left">
+            <MessageSquareText size={20} strokeWidth={1.5} className="text-(--start-icon) group-hover:text-(--start-icon-hover)" />
+            <div>
+              <h3 className="text-sm font-semibold text-(--start-title)">
+                자유롭게 질문하기
+              </h3>
+              <p className="mt-1 text-xs text-(--start-description)">
+                원하는 내용을 입력하고 AI와 대화를 시작하세요.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-(--start-description) group-hover:text-(--start-accent)">
+            대화방 열기
+            <ArrowRight size={14} />
+          </div>
+        </motion.button>
+      </motion.div>
+    </div>
+  );
 }
