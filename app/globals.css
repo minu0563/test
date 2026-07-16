@@ -69,6 +69,7 @@
   /* 로그인 폼 ui */
   --loginform-bg: #000000;
   --loginform-close-hover: #f3f4f6;
+  --loginform-border: #e5e5e5;
   --loginform-explain: #4a5565;
   --loginform-button-border: #6a7282;
 }
@@ -85,7 +86,7 @@ html.dark {
   --sideber-login-hover: #262626;
 
   /* 채팅 페이지 배경 */
-  --chat-background: #0f0f0f;
+  --chat-background: #1b1b1b;
 
   /* ai 메세지 ui */
   --aichat-background: #171717;
@@ -141,6 +142,7 @@ html.dark {
 
   /* 로그인 폼 ui */
   --loginform-bg: #171717;
+  --loginform-border: #525252;
   --loginform-close-hover: #262626;
   --loginform-explain: #a3a3a3;
   --loginform-button-border: #525252;

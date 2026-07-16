@@ -15,7 +15,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             onClick={onClose}
         >
             <div
-                className="bg-(--bg) px-6 pb-6 pt-2 rounded shadow-lg"
+                className="bg-(--bg) px-6 pb-6 pt-2 rounded shadow-lg border border-(--loginform-border)"
                 onClick={(e) => e.stopPropagation()}
             >
                 <LoginForm onClose={onClose} />
