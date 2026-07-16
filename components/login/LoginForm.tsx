@@ -3,15 +3,24 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
         <div>
             <div className="flex flex-col mt-3 w-full md:w-96">
                 <div className="flex justify-end">
-                    <button className="w-9 h-9 text-3xl rounded-full flex items-center justify-center text-text hover:bg-loginform-close-hover" onClick={onClose}>
+                    <button
+                        className="w-9 h-9 text-3xl rounded-full flex items-center justify-center text-(--text) hover:bg-(--loginform-close-hover)"
+                        onClick={onClose}
+                    >
                         ×
                     </button>
                 </div>
+
                 <div className="flex flex-col items-center justify-center mt-3">
-                    <p className="text-2xl mb-2 text-text">로그인 및 회원가입</p>
-                    <p className="text-loginform-explain">로그인을 통해 자소서 정보를 관리하세요.</p>
+                    <p className="text-2xl mb-2 text-(--text)">
+                        로그인 및 회원가입
+                    </p>
+                    <p className="text-(--loginform-explain)">
+                        로그인을 통해 자소서 정보를 관리하세요.
+                    </p>
                 </div>
-                <button className="w-full mt-6 p-3 rounded-full border border-loginform-button-border">
+
+                <button className="w-full mt-6 p-3 rounded-full border border-(--loginform-button-border)">
                     <div className="flex items-center justify-center gap-2 cursor-pointer">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +45,8 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
                                 d="M43.611 20.083H42V20H24v8h11.303c-1.087 3.064-3.23 5.461-5.421 7.11l5.891 4.99C39.816 36.625 43 31.25 43 24c0-1.273-.13-2.515-.389-3.917z"
                             />
                         </svg>
-                        <span>
+
+                        <span className="text-(--text)">
                             구글 계정으로 계속하기
                         </span>
                     </div>
