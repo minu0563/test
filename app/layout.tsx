@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-<<<<<<< HEAD
-import Sidebar from "@/components/sidebar";
-
-=======
 import Sidebar from "@/components/Sidebar";
 import Script from "next/script";
->>>>>>> 6499003 (commit dark/white mode)
 
 export default function RootLayout({
   children,
