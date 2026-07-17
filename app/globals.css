@@ -6,6 +6,25 @@
   --bg: #ffffff;
   --text: #000000;
 
+    /* 시작 화면 */
+  --start-intro-bg: #000000;
+  --start-intro-text: #ffffff;
+
+  --start-card-bg: #ffffff;
+  --start-card-border: #e5e5e5;
+  --start-card-hover: #fafafa;
+
+  --start-title: #171717;
+  --start-description: #737373;
+
+  --start-icon: #737373;
+  --start-icon-hover: #155dfc;
+
+  --start-arrow: #d4d4d4;
+  --start-arrow-hover: #155dfc;
+
+  --start-accent: #155dfc;
+
   /* 사이드 바 */
   --sidebar-border: #d1d5dc;
   --sidebar-newchat-hover: #f3f4f6;
@@ -69,6 +88,7 @@
   /* 로그인 폼 ui */
   --loginform-bg: #000000;
   --loginform-close-hover: #f3f4f6;
+  --loginform-border: #e5e5e5;
   --loginform-explain: #4a5565;
   --loginform-button-border: #6a7282;
 }
@@ -79,19 +99,38 @@ html.dark {
   --bg: #171717;
   --text: #f5f5f5;
 
+    /* 시작 화면 */
+  --start-intro-bg: #000000;
+  --start-intro-text: #ffffff;
+
+  --start-card-bg: #171717;
+  --start-card-border: #2f2f2f;
+  --start-card-hover: #262626;
+
+  --start-title: #f5f5f5;
+  --start-description: #a3a3a3;
+
+  --start-icon: #a3a3a3;
+  --start-icon-hover: #60a5fa;
+
+  --start-arrow: #525252;
+  --start-arrow-hover: #60a5fa;
+
+  --start-accent: #2563eb;
+
   /* 사이드 바 */
   --sidebar-border: #2f2f2f;
   --sidebar-newchat-hover: #262626;
   --sideber-login-hover: #262626;
-
+  
   /* 채팅 페이지 배경 */
-  --chat-background: #0f0f0f;
-
+  --chat-background: #1d1c1c;
+  
   /* ai 메세지 ui */
-  --aichat-background: #171717;
-  --aichat-border: #2f2f2f;
+  --aichat-background: #1b1b1b;
+  --aichat-border: #494949;
   --aichat-text: #f5f5f5;
-
+  
   /* 추론 ui */
   --thinking-border: #404040;
   --thinking-text: #a3a3a3;
@@ -141,6 +180,7 @@ html.dark {
 
   /* 로그인 폼 ui */
   --loginform-bg: #171717;
+  --loginform-border: #525252;
   --loginform-close-hover: #262626;
   --loginform-explain: #a3a3a3;
   --loginform-button-border: #525252;

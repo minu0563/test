@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
 import Script from "next/script";
 
 export default function RootLayout({
@@ -8,30 +7,40 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (  
+  return (
     <html
       lang="en"
       suppressHydrationWarning
-      className={` h-full antialiased `}
+      className="h-full antialiased"
     >
       <head>
         <Script id="theme-init" strategy="beforeInteractive">
           {`
-          try {
-            const theme = localStorage.getItem("theme");
-            if (theme === "dark") {
-              document.documentElement.classList.add("dark");
-            }
-          } catch {}
-        `}
+            try {
+              const theme = localStorage.getItem("theme");
+
+              if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+              } 
+              else if (theme === "light") {
+                document.documentElement.classList.remove("dark");
+              } 
+              else {
+                const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+                if (systemDark) {
+                  document.documentElement.classList.add("dark");
+                } else {
+                  document.documentElement.classList.add("dark");
+                }
+              }
+            } catch {}
+          `}
         </Script>
       </head>
-      <body className="flex min-h-screen bg-(--bg) text-(--text)">
-        <Sidebar />
 
-        <main className="flex-1 relative">
-          {children}
-        </main>
+      <body className="min-h-screen bg-(--bg) text-(--text)">
+        {children}
       </body>
     </html>
   );

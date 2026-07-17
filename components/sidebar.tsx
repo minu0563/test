@@ -10,7 +10,27 @@ export default function Sidebar() {
     const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
-        setIsDark(document.documentElement.classList.contains("dark"));
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+        const applyTheme = () => {
+            const saved = localStorage.getItem("theme");
+
+            if (saved) {
+                setIsDark(saved === "dark");
+                document.documentElement.classList.toggle("dark", saved === "dark");
+            } else {
+                setIsDark(media.matches);
+                document.documentElement.classList.toggle("dark", media.matches);
+            }
+        };
+
+        applyTheme();
+
+        media.addEventListener("change", applyTheme);
+
+        return () => {
+            media.removeEventListener("change", applyTheme);
+        };
     }, []);
 
     const toggleTheme = () => {
@@ -28,10 +48,8 @@ export default function Sidebar() {
 
     return (
         <div className="w-12 md:w-48 lg:w-64 p-4 border-r border-(--sidebar-border) h-screen flex flex-col">
-            <p
-                className="hidden md:block text-4xl font-bold cursor-pointer text-(--text)"
-                onClick={() => router.push("/")}
-            >
+            <p className="hidden md:block text-4xl font-bold cursor-pointer text-(--text)"
+                onClick={() => router.push("/sc")}>
                 test
             </p>
 
@@ -39,35 +57,27 @@ export default function Sidebar() {
                 +
             </p>
 
-            <p
-                className="hidden md:block mt-7 p-2 rounded text-(--text) font-bold cursor-pointer hover:bg-(--sidebar-newchat-hover)"
-                onClick={() => router.push("/")}
-            >
-                새 채팅
+            <p className="hidden md:block mt-7 p-2 rounded text-(--text) font-bold cursor-pointer hover:bg-(--sidebar-newchat-hover)"
+                onClick={() => router.push("/")}>
+                새 태마
             </p>
 
             <div className="hidden md:block text-(--text) p-2 mt-5 font-bold">
                 <p>최근 채팅</p>
             </div>
 
-            <button
-                onClick={toggleTheme}
-                className="hidden md:block mt-auto mb-2 p-2 rounded text-left text-(--text) font-bold hover:bg-(--sidebar-newchat-hover)"
-            >
+            <button onClick={toggleTheme}
+                className="hidden md:block mt-auto mb-2 p-2 rounded text-left text-(--text) font-bold hover:bg-(--sidebar-newchat-hover)">
                 {isDark ? "라이트 모드" : "다크 모드"}
             </button>
 
-            <div
-                className="hidden md:block p-2 text-(--text) font-bold cursor-pointer hover:bg-(--sideber-login-hover)"
-                onClick={() => setLoginOpen(true)}
-            >
+            <div className="hidden md:block p-2 text-(--text) font-bold cursor-pointer hover:bg-(--sideber-login-hover)"
+                onClick={() => setLoginOpen(true)}>
                 <p>login</p>
             </div>
 
-            <LoginModal
-                isOpen={isLoginOpen}
-                onClose={() => setLoginOpen(false)}
-            />
+            <LoginModal isOpen={isLoginOpen}
+                onClose={() => setLoginOpen(false)} />
         </div>
     );
 }

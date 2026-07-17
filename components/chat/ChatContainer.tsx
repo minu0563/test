@@ -52,6 +52,8 @@ export default function ChatPage() {
         },
         body: JSON.stringify({
           message: text,
+          promptType: "chat",
+
         }),
         signal: abortController.signal,
       });
