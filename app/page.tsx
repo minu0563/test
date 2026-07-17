@@ -31,13 +31,18 @@ const templates = [
 export default function StartScreen() {
   const [intro, setIntro] = useState(false);
   const [introStep, setIntroStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
   /* 잡담용 이동 */
   const goStratChat = () => {
-    router.push("/sc");
-  }
+    setIsLoading(true);
+
+    setTimeout(() => {
+      router.push("/sc");
+    }, 700);
+  };
 
   useEffect(() => {
     const viewed = sessionStorage.getItem("start-intro");
@@ -52,7 +57,7 @@ export default function StartScreen() {
 
     const timer1 = setTimeout(() => setIntroStep(1), 1500);
     const timer2 = setTimeout(() => setIntroStep(2), 4000);
-    const timer3 = setTimeout(() => setIntro(false), 5000);
+    const timer3 = setTimeout(() => setIntro(false), 5500);
 
     return () => {
       clearTimeout(timer1);
@@ -99,6 +104,44 @@ export default function StartScreen() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-(--bg)"
+          >
+            <div className="flex flex-col items-center gap-6">
+              <div className="relative h-14 w-14">
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 border-(--start-card-border)"
+                />
+
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 border-transparent border-t-(--start-accent)"
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 0.8,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                />
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-sm text-(--start-description)"
+              >
+                대화방을 준비하고 있습니다...
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: intro ? 0 : 1, y: intro ? 20 : 0 }} transition={{ duration: 0.6 }}
         className="max-w-4xl mx-auto px-8 py-20">
         <div className="mb-14">
@@ -117,8 +160,8 @@ export default function StartScreen() {
 
             return (
               <motion.button key={item.title} initial={{ opacity: 0, y: 15 }} animate={{ opacity: intro ? 0 : 1, y: intro ? 15 : 0 }} transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="group flex flex-col justify-between text-left rounded-xl border border-(--start-card-border) bg-(--start-card-bg) p-6 min-h-[170px] 
-                                         transition-all duration-200 hover:border-(--start-accent) hover:bg-(--start-card-hover) hover:-translate-y-1">
+                className="group flex flex-col justify-between text-left rounded-xl border border-(--start-card-border) bg-(--start-card-bg) p-6 min-h-42.5 
+                                         transition-all duration-200 hover:border-(--start-accent) hover:bg-(--start-card-hover) hover:-translate-y-1 cursor-pointer">
                 <div className="flex items-start justify-between w-full">
                   <Icon size={20} strokeWidth={1.5} className="text-(--start-icon) group-hover:text-(--start-icon-hover) transition-colors" />
                   <ArrowRight size={16} strokeWidth={1.5} className="text-(--start-arrow) group-hover:text-(--start-arrow-hover) group-hover:translate-x-1 transition-all" />
@@ -135,7 +178,7 @@ export default function StartScreen() {
 
         <motion.button initial={{ opacity: 0 }} animate={{ opacity: intro ? 0 : 1 }} transition={{ delay: 0.4 }} onClick={goStratChat}
           className="group mt-4 w-full flex items-center justify-between rounded-xl border border-dashed border-(--start-card-border) bg-transparent p-5 
-                               transition-all duration-200 hover:border-(--start-accent) hover:bg-(--start-card-hover)">
+                               transition-all duration-200 hover:border-(--start-accent) hover:bg-(--start-card-hover) cursor-pointer">
           <div className="flex items-center gap-4 text-left">
             <MessageSquareText size={20} strokeWidth={1.5} className="text-(--start-icon) group-hover:text-(--start-icon-hover)" />
             <div>
