@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Script from "next/script";
+import Providers from "@/components/Providers";
 
 export default function RootLayout({
   children,
@@ -40,7 +41,9 @@ export default function RootLayout({
       </head>
 
       <body className="min-h-screen bg-(--bg) text-(--text)">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

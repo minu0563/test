@@ -48,9 +48,9 @@ export default function Sidebar() {
 
     return (
         <div className="w-12 md:w-48 lg:w-64 p-4 border-r border-(--sidebar-border) h-screen flex flex-col">
-            <p className="hidden md:block text-4xl font-bold cursor-pointer text-(--text)"
+            <p className="hidden md:block text-4xl cursor-pointer text-(--text)"
                 onClick={() => router.push("/sc")}>
-                test
+                ResuMate
             </p>
 
             <p className="block md:hidden text-2xl font-bold text-(--text) text-center items-center cursor-pointer">
@@ -76,7 +76,8 @@ export default function Sidebar() {
                 <p>login</p>
             </div>
 
-            <LoginModal isOpen={isLoginOpen}
+            <LoginModal 
+                isOpen={isLoginOpen}
                 onClose={() => setLoginOpen(false)} />
         </div>
     );
