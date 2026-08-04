@@ -2,7 +2,7 @@
 
 import ChatInput from "@/components/chat/ChatInput";
 import Chat from "@/components/chat/Chat";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { v4 as uuid } from "uuid";
 
@@ -21,6 +21,19 @@ export default function ChatPage() {
 
   const [controller, setController] = useState<AbortController | null>(null);
   const [isStreaming, setIsStreaming] = useState(false);
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const [autoScroll, setAutoScroll] = useState(true);
+  const [thinkingMode, setThinkingMode] = useState(false);
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+
+    const isBottom =
+      target.scrollHeight - target.scrollTop - target.clientHeight < 50;
+
+    setAutoScroll(isBottom);
+  };
+
 
   const sendMessage = async (text: string) => {
     const userMessage: Message = {
@@ -53,6 +66,7 @@ export default function ChatPage() {
         body: JSON.stringify({
           message: text,
           promptType: "chat",
+          thinkingMode,
 
         }),
         signal: abortController.signal,
@@ -164,9 +178,21 @@ export default function ChatPage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (autoScroll) {
+      bottomRef.current?.scrollIntoView({
+        behavior: "auto",
+      });
+    }
+  }, [messages, autoScroll]);
+
   return (
     <div className="flex h-screen flex-col bg-(--bg)">
-      <Chat messages={messages} />
+      <Chat
+        messages={messages}
+        bottomRef={bottomRef}
+        handleScroll={handleScroll}
+      />
 
       <ChatInput
         message={message}
@@ -174,8 +200,11 @@ export default function ChatPage() {
         testAI={testAI}
         stopAI={stopAI}
         isStreaming={isStreaming}
+        thinkingMode={thinkingMode}
+        setThinkingMode={setThinkingMode}
         mode="chat"
       />
+
     </div>
   );
 }

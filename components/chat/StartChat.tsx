@@ -7,6 +7,7 @@ import ChatInput from "@/components/chat/ChatInput";
 
 export default function StartChat() {
   const router = useRouter();
+  const [thinkingMode, setThinkingMode] = useState(false);
 
   const [message, setMessage] = useState("");
 
@@ -38,6 +39,8 @@ export default function StartChat() {
         testAI={startChat}
         stopAI={() => {}}
         isStreaming={false}
+        thinkingMode={thinkingMode}
+        setThinkingMode={setThinkingMode}
         mode="start"
       />
 
