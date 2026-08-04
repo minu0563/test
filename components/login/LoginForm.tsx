@@ -1,3 +1,6 @@
+"use client";
+import { signIn } from "next-auth/react";
+
 export default function LoginForm({ onClose }: { onClose: () => void }) {
     return (
         <div>
@@ -20,7 +23,8 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
                     </p>
                 </div>
 
-                <button className="w-full mt-6 p-3 rounded-full border border-(--loginform-button-border)">
+                <button onClick={() => signIn("google")}
+                        className="w-full mt-6 p-3 rounded-full border border-(--loginform-button-border)">
                     <div className="flex items-center justify-center gap-2 cursor-pointer">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
