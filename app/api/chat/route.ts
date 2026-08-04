@@ -1,10 +1,10 @@
 import { getSystemPrompt } from "@/lib/getSystemPrompt";
 
 export async function POST(req: Request) {
-  const { message, promptType } = await req.json();
-  const model = ["qwen2.5:1.5b", "qwen3:8b", "gemma4:26b", "gemma4:e4b"]
+  const { message, promptType, thinkingMode } = await req.json();
+  const model = ["qwen2.5:1.5b", "qwen3.5:9b", "gemma4:26b", "gemma4:e4b"]
   const SYSTEM_PROMPT = getSystemPrompt(promptType);
-  
+
   try {
     const ollamaResponse = await fetch("http://localhost:11434/api/chat", {
       method: "POST",
@@ -13,12 +13,13 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: model[3],
+        model: model[1],
         stream: true,
+        think: thinkingMode,
+
         options: {
           temperature: 0.2,
           repeat_penalty: 1.1,
-          think: true,
           num_ctx: 32768,
           num_predict: 8192,
 
