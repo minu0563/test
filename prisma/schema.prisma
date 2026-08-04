@@ -7,23 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ChatSession {
-  id        String    @id @default(cuid())
-  title     String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model User {
+  id    String @id @default(cuid())
+  name  String
 
-  messages  Message[]
+  chatSessions ChatSession[]
+}
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
+  messages Message[]
 }
 
 model Message {
-  id            String      @id @default(cuid())
-  role          String
-  content       String      @db.LongText
-  createdAt     DateTime    @default(now())
+  id        String   @id @default(cuid())
+  role      String
+  content   String   @db.LongText
+  createdAt DateTime @default(now())
 
   chatSessionId String
   chatSession   ChatSession @relation(fields: [chatSessionId], references: [id], onDelete: Cascade)
-
-  @@index([chatSessionId])
 }
