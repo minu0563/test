@@ -1,7 +1,7 @@
 import { getSystemPrompt } from "@/lib/getSystemPrompt";
 
 export async function POST(req: Request) {
-  const { message, promptType, thinkingMode } = await req.json();
+  const { messages, promptType, thinkingMode } = await req.json();
   const model = ["qwen2.5:1.5b", "qwen3.5:9b", "gemma4:26b", "gemma4:e4b"]
   const SYSTEM_PROMPT = getSystemPrompt(promptType);
 
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
           temperature: 0.2,
           repeat_penalty: 1.1,
           num_ctx: 32768,
-          num_predict: 8192,
+          num_predict: -1,
 
         },
         messages: [
@@ -29,10 +29,7 @@ export async function POST(req: Request) {
             role: "system",
             content: SYSTEM_PROMPT,
           },
-          {
-            role: "user",
-            content: message,
-          },
+          ...messages,
         ],
       }),
     });
