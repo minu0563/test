@@ -32,7 +32,9 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
 
                     <button className="mt-5 text-(--loginform-explain) cursor-pointer py-2 mb-2 w-full 
                             border border-(--loginform-border) hover:text-red-600/80 hover:border-red-500/60"
-                            onClick={() => signOut()}>
+                            onClick={() => signOut({
+                                callbackUrl: "/"
+                            })}>
                         로그아웃
                     </button>
                 </div>

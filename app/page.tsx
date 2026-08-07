@@ -10,21 +10,25 @@ const templates = [
     icon: FilePenLine,
     title: "자기소개서 & 이력서 첨삭",
     description: "강점을 극대화하고 미흡한 문항과 표현을 즉시 개선합니다.",
+    goTo: "/",
   },
   {
     icon: PencilLine,
     title: "자기소개서 작성",
     description: "개별 경험 데이터와 에피소드를 구조화하여 맞춤형 초안을 완성합니다.",
+    goTo: "/",
   },
   {
     icon: MessageSquareText,
     title: "면접 준비",
     description: "지원 직무와 기업 분석을 기반으로 예상 질문과 답변 전략을 준비합니다.",
+    goTo: "/",
   },
   {
     icon: FileText,
     title: "정보 입력",
     description: "AI가 기억했으면 하는 정보를 입력하세요.",
+    goTo: "/profile",
   },
 ];
 
@@ -41,6 +45,15 @@ export default function StartScreen() {
 
     setTimeout(() => {
       router.push("/sc");
+    }, 700);
+  };
+
+  const goTo = (path: string) => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      router.push(path);
+      setIsLoading(false);
     }, 700);
   };
 
@@ -161,14 +174,15 @@ export default function StartScreen() {
             return (
               <motion.button key={item.title} initial={{ opacity: 0, y: 15 }} animate={{ opacity: intro ? 0 : 1, y: intro ? 15 : 0 }} transition={{ duration: 0.4, delay: index * 0.08 }}
                 className="group flex flex-col justify-between text-left rounded-xl border border-(--start-card-border) bg-(--start-card-bg) p-6 min-h-42.5 
-                                         transition-all duration-200 hover:border-(--start-accent) hover:bg-(--start-card-hover) hover:-translate-y-1 cursor-pointer">
+                                         transition-all duration-200 hover:border-(--start-accent) hover:bg-(--start-card-hover) hover:-translate-y-1 cursor-pointer"
+                onClick={() => goTo(item.goTo)}>
                 <div className="flex items-start justify-between w-full">
                   <Icon size={20} strokeWidth={1.5} className="text-(--start-icon) group-hover:text-(--start-icon-hover) transition-colors" />
                   <ArrowRight size={16} strokeWidth={1.5} className="text-(--start-arrow) group-hover:text-(--start-arrow-hover) group-hover:translate-x-1 transition-all" />
                 </div>
 
                 <div className="mt-8">
-                  <h3 className="text-sm font-semibold text-(--start-title) group-hover:text-(--start-accent) transition-colors">{item.title}</h3>
+                  <h3 className="text-[15px] font-semibold text-(--start-title) group-hover:text-(--start-accent) transition-colors">{item.title}</h3>
                   <p className="mt-2 text-xs text-(--start-description) leading-relaxed">{item.description}</p>
                 </div>
               </motion.button>

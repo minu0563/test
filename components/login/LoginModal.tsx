@@ -11,8 +11,9 @@ interface LoginModalProps {
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     const { data: session, status } = useSession();
 
-    if (!isOpen) return null;
-
+    if (!isOpen || status === "loading") {
+        return null;
+    }
     return (
         <>
             {/* 로그인 안된거 */}
