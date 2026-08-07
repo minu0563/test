@@ -25,6 +25,10 @@
   }
 }
 
+body {
+  font-family: var(--font-custom);
+}
+
 :root {
   /* 기본*/
   --bg: #ffffff;
