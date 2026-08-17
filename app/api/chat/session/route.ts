@@ -2,59 +2,102 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { LABEL_BY_INTENT, type ChatIntent } from "@/lib/intent";
+
+const VALID: ChatIntent[] = [
+  "CHAT",
+  "WRITE",
+  "REVIEW",
+  "INTERVIEW",
+];
 
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json(
-        { message: "Unauthorized" },
+        { message: "로그인이 필요합니다" },
         { status: 401 }
       );
     }
 
-    const { id, title, firstMessage } = await req.json();
+    const body = await req.json().catch(() => ({}));
 
-    if (!id || !firstMessage) {
-      return NextResponse.json(
-        { message: "Invalid data" },
-        { status: 400 }
-      );
-    }
+    const { id, title, firstMessage } = body;
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email: session.user.email,
-      },
-    });
+    const intent: ChatIntent = VALID.includes(body.intent)
+      ? body.intent
+      : "CHAT";
 
-    if (!user) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
-    }
+    // 기존처럼 firstMessage가 있으면 세션 생성과 동시에 첫 메시지도 생성
+    if (firstMessage) {
+      const created = await prisma.chatSession.create({
+        data: {
+          id: typeof id === "string" && id.trim()
+            ? id
+            : crypto.randomUUID(),
 
-    await prisma.chatSession.create({
-      data: {
-        id,
-        title: title || firstMessage.slice(0, 30),
-        userId: user.id,
+          title:
+            typeof title === "string" && title.trim()
+              ? title.trim().slice(0, 60)
+              : firstMessage.slice(0, 30),
 
-        messages: {
-          create: {
-            role: "user",
-            content: firstMessage,
+          userId: session.user.id,
+          intent,
+
+          messages: {
+            create: {
+              role: "user",
+              content: firstMessage,
+            },
           },
         },
+
+        select: {
+          id: true,
+          title: true,
+          intent: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        ...created,
+      });
+    }
+
+    // firstMessage 없이 세션만 먼저 만드는 경우
+    const created = await prisma.chatSession.create({
+      data: {
+        id: typeof id === "string" && id.trim()
+          ? id
+          : crypto.randomUUID(),
+
+        title:
+          typeof title === "string" && title.trim()
+            ? title.trim().slice(0, 60)
+            : LABEL_BY_INTENT[intent],
+
+        userId: session.user.id,
+        intent,
+      },
+
+      select: {
+        id: true,
+        title: true,
+        intent: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 
     return NextResponse.json({
       success: true,
+      ...created,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -65,43 +108,47 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
 
-  const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "로그인이 필요합니다" },
+        { status: 401 }
+      );
+    }
 
+    const chats = await prisma.chatSession.findMany({
+      where: {
+        userId: session.user.id,
+      },
 
-  if (!session?.user?.email) {
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+        {
+          createdAt: "desc",
+        },
+      ],
+
+      select: {
+        id: true,
+        title: true,
+        intent: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return NextResponse.json(chats);
+  } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
-      [],
-      { status: 401 }
+      { message: "Server error" },
+      { status: 500 }
     );
   }
-
-
-  const chats = await prisma.chatSession.findMany({
-    where: {
-      user: {
-        email: session.user.email,
-      },
-    },
-
-    orderBy: [
-      {
-        updatedAt: "desc",
-      },
-      {
-        createdAt: "desc",
-      },
-    ],
-
-    select: {
-      id: true,
-      title: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
-
-
-  return NextResponse.json(chats);
 }
