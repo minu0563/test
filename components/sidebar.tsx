@@ -5,10 +5,12 @@ import LoginModal from "@/components/login/LoginModal";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Trash2 } from "lucide-react";
+import { sessionHref, LABEL_BY_INTENT, type ChatIntent } from "@/lib/intent";
 
 type ChatSession = {
     id: string;
     title: string;
+    intent: ChatIntent;
     createdAt: string;
     updatedAt: string;
 };
@@ -27,7 +29,7 @@ export default function Sidebar() {
 
         const applyTheme = () => {
             const saved = localStorage.getItem("theme");
-                
+
             if (saved) {
                 setIsDark(saved === "dark");
                 document.documentElement.classList.toggle("dark", saved === "dark");
@@ -79,6 +81,8 @@ export default function Sidebar() {
 
         if (!confirmDelete) return;
 
+        const target = chats.find((chat) => chat.id === id);
+
         const res = await fetch(`/api/chat/session/${id}`, {
             method: "DELETE",
         });
@@ -88,8 +92,9 @@ export default function Sidebar() {
                 prev.filter((chat) => chat.id !== id)
             );
 
-            if (pathname === `/c/${id}`) {
-                router.push("/sc");
+            // 지금 보고 있는 대화방을 지웠으면 시작 화면으로
+            if (target && pathname === sessionHref(target.intent ?? "CHAT", id)) {
+                router.push("/");
             }
         }
     };
@@ -97,7 +102,7 @@ export default function Sidebar() {
     return (
         <aside className="w-12 md:w-56 lg:w-64 h-screen flex flex-col border-r border-(--sidebar-border) bg-(--bg) p-4">
             <div
-                onClick={() => router.push("/sc")}
+                onClick={() => router.push("/")}
                 className="hidden md:block text-4xl font-md cursor-pointer text-(--text) mb-6 select-none"
             >
                 ResuMate
@@ -109,9 +114,9 @@ export default function Sidebar() {
 
             <button
                 onClick={() => router.push("/")}
-                className="hidden md:block w-full text-left px-3 py-2.5 rounded-xl font-semibold text-(--text) hover:bg-(--sidebar-newchat-hover) transition"
+                className="hidden md:block w-full text-left px-3 py-2.5 rounded-xl font-semibold text-(--text) hover:bg-(--sidebar-newchat-hover) transition cursor-pointer"
             >
-                + 새 태마
+                + 새 테마
             </button>
 
             <div className="hidden md:flex flex-col mt-6 flex-1 overflow-hidden">
@@ -121,29 +126,39 @@ export default function Sidebar() {
 
                 <div className="flex-1 overflow-y-auto space-y-1 pr-1">
                     {chats.map((chat) => {
-                        const active = pathname === `/c/${chat.id}`;
+                        const intent = chat.intent ?? "CHAT";
+                        const href = sessionHref(intent, chat.id);
+                        const active = pathname === href;
 
                         return (
                             <div
                                 key={chat.id}
                                 className={`group flex items-center rounded-xl transition ${active
-                                        ? "bg-(--sidebar-newchat-hover)"
-                                        : "hover:bg-(--sidebar-newchat-hover)"
+                                    ? "bg-(--sidebar-newchat-hover)"
+                                    : "hover:bg-(--sidebar-newchat-hover)"
                                     }`}
                             >
                                 <button
-                                    onClick={() => router.push(`/c/${chat.id}`)}
-                                    className={`flex-1 text-left px-3 py-2 text-[14px] truncate ${active
-                                            ? "font-semibold text-(--text)"
-                                            : "text-(--text) opacity-80"
+                                    onClick={() => router.push(href)}
+                                    className={`min-w-0 flex-1 text-left px-3 py-2 cursor-pointer ${active
+                                        ? "font-semibold text-(--text)"
+                                        : "text-(--text) opacity-80"
                                         }`}
                                 >
-                                    {chat.title}
+                                    <span className="block truncate text-[14px]">
+                                        {chat.title}
+                                    </span>
+
+                                    {intent !== "CHAT" && (
+                                        <span className="block text-[11px] text-(--text) opacity-50">
+                                            {LABEL_BY_INTENT[intent]}
+                                        </span>
+                                    )}
                                 </button>
 
                                 <button
                                     onClick={() => deleteChat(chat.id)}
-                                    className="hidden group-hover:block mr-2 text-(--text) opacity-60 hover:opacity-100"
+                                    className="hidden group-hover:block mr-2 text-(--text) opacity-60 cursor-pointer hover:opacity-100"
                                 >
                                     <Trash2 size={15} />
                                 </button>
