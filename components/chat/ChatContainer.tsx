@@ -233,7 +233,6 @@ export default function ChatPage() {
 
     bottomRef.current?.scrollIntoView({
       behavior: "auto",
-      block: "end",
     });
 
     if (shouldScroll) {

@@ -53,7 +53,7 @@ export default function Chat({
   }, [messages]);
 
   return (
-    <div onScroll={handleScroll} className="chat-scrollbar flex flex-1 flex-col overflow-y-auto bg-(--chat-background) px-4 py-6">
+    <div onScroll={handleScroll} className="chat-scrollbar flex flex-1 flex-col overflow-y-auto bg-(--chat-background) px-4 py-6 pb-30">
       <div className="mx-auto w-full max-w-4xl space-y-6">
         {messages.map((msg, index) => {
           const isUser = msg.role === "user";
@@ -192,7 +192,7 @@ export default function Chat({
                         br: () => <br />,
                       }}
                     >
-                      {msg.content.replace(/\\([*_])/g, "$1")}
+                      {msg.content}
                     </ReactMarkdown>
                   </div>
                 )}
