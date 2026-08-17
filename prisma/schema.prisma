@@ -8,15 +8,17 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(cuid())
-  name  String
-  email String  @unique
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
   emailVerified DateTime?
-  image String?
+  image         String?
 
   chatSessions ChatSession[]
   accounts     Account[]
-  profiles     UserProfile[]
+  studentInfo StudentInfo?
+  attendance  Attendance[]
+  activities  Activity[]
 }
 
 model Account {
@@ -34,21 +36,32 @@ model Account {
   id_token      String? @db.Text
   session_state String?
 
-  user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+enum ChatIntent {
+  CHAT
+  WRITE
+  REVIEW
+  INTERVIEW
 }
 
 model ChatSession {
   id        String   @id
   title     String
+  intent    ChatIntent @default(CHAT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   messages Message[]
+
+  @@index([userId, updatedAt])
 }
 
 model Message {
@@ -59,22 +72,96 @@ model Message {
 
   chatSessionId String
   chatSession   ChatSession @relation(fields: [chatSessionId], references: [id], onDelete: Cascade)
+
+  @@index([chatSessionId, createdAt])
 }
 
-model UserProfile {
-  id String @id
+/* ==================================================================
+ * 프로필 — /p 에서 학생이 직접 입력하고, 채팅 시 프롬프트로 주입된다
+ * ================================================================== */
 
+enum ActivityType {
+  AWARD // 수상
+  MDP // MDP 프로젝트
+  PROJECT // 개인 프로젝트
+  CERT // 자격증
+  CLUB // 동아리
+  ETC
+}
+
+/// 학생당 1행. 자소서·면접 답변 전체에 깔리는 기본 정보
+model StudentInfo {
+  userId String @id
+
+  department   String @default("")
+  currentGrade Int?
+  classNo      Int?
+
+  /// 학과 내 상위 % (1~2학기 통합). 지나지 않은 학년은 null
+  percentile1 Float?
+  percentile2 Float?
+  percentile3 Float?
+
+  targetJob       String? @db.Text
+  targetCompanies String? @db.Text
+  strengths       String? @db.Text
+
+  /// true면 Attendance 행은 모두 0으로 유지된다.
+  /// "전부 0"과 "아직 입력 안 함"을 구분하는 역할
+  perfectAttendance Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+/// 학년별 1행 (1, 2, 3)
+model Attendance {
+  id         String @id @default(cuid())
+  userId     String
+  schoolYear Int
+
+  absentUnexcused Int @default(0)
+  absentSick      Int @default(0)
+  lateUnexcused   Int @default(0)
+  lateSick        Int @default(0)
+  earlyLeave      Int @default(0)
+  classSkip       Int @default(0)
+
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, schoolYear])
+}
+
+/// 수상 · MDP · 개인 프로젝트 · 자격증 · 동아리 · 기타
+model Activity {
+  id     String       @id @default(cuid())
   userId String
+  type   ActivityType
 
-  category String
-  title String
-  content String @db.Text
+  title        String
+  organization String?
+  award        String?
+  startDate    DateTime?
+  endDate      DateTime?
+  role         String?   @db.Text
+  teamSize     Int?
+  techStack    String?
+  content      String    @db.Text
+  result       String?   @db.Text
+  link         String?
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
 }
 
+/// 학교 공통 정보 (학과 소개, 기업 정보, 면접 기출 등). 유저 무관
 model SharedKnowledge {
   id        String   @id @default(cuid())
   category  String
