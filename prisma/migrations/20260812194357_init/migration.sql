@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `chatsession` ADD COLUMN `intent` ENUM('CHAT', 'WRITE', 'REVIEW', 'INTERVIEW') NOT NULL DEFAULT 'CHAT';

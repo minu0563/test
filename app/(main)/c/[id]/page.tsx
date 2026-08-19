@@ -1,5 +1,10 @@
-import ChatPage from "@/components/chat/ChatContainer";
+import ChatContainer from "@/components/chat/ChatContainer";
+import ChatAuthGuard from "@/components/chat/ChatAuthGuard";
 
 export default function Page() {
-  return <ChatPage />;
+  return (
+    <ChatAuthGuard>
+      <ChatContainer />
+    </ChatAuthGuard>
+  );
 }
